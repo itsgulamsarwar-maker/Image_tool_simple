@@ -1,3 +1,4 @@
+
 import { Blob } from '@google/genai';
 
 export const fileToBase64 = (file: File): Promise<{ base64Data: string; mimeType: string }> => {
@@ -13,8 +14,7 @@ export const fileToBase64 = (file: File): Promise<{ base64Data: string; mimeType
   });
 };
 
-// NOTE: The following functions are based on the Gemini API documentation for audio processing.
-
+// Fix: Add missing audio utility functions for use in the useLiveConversation hook. These functions are required for encoding and decoding audio for the Live API.
 function encode(bytes: Uint8Array): string {
   let binary = '';
   const len = bytes.byteLength;
@@ -24,7 +24,7 @@ function encode(bytes: Uint8Array): string {
   return btoa(binary);
 }
 
-export function createBlob(data: Float32Array): Blob {
+export const createBlob = (data: Float32Array): Blob => {
   const l = data.length;
   const int16 = new Int16Array(l);
   for (let i = 0; i < l; i++) {
@@ -34,9 +34,9 @@ export function createBlob(data: Float32Array): Blob {
     data: encode(new Uint8Array(int16.buffer)),
     mimeType: 'audio/pcm;rate=16000',
   };
-}
+};
 
-export function decode(base64: string): Uint8Array {
+export const decode = (base64: string): Uint8Array => {
   const binaryString = atob(base64);
   const len = binaryString.length;
   const bytes = new Uint8Array(len);
@@ -44,14 +44,14 @@ export function decode(base64: string): Uint8Array {
     bytes[i] = binaryString.charCodeAt(i);
   }
   return bytes;
-}
+};
 
-export async function decodeAudioData(
+export const decodeAudioData = async (
   data: Uint8Array,
   ctx: AudioContext,
   sampleRate: number,
   numChannels: number,
-): Promise<AudioBuffer> {
+): Promise<AudioBuffer> => {
   const dataInt16 = new Int16Array(data.buffer);
   const frameCount = dataInt16.length / numChannels;
   const buffer = ctx.createBuffer(numChannels, frameCount, sampleRate);
@@ -63,4 +63,4 @@ export async function decodeAudioData(
     }
   }
   return buffer;
-}
+};
