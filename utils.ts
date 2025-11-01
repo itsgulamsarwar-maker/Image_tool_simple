@@ -1,4 +1,3 @@
-// Fix: Import the Blob type from @google/genai, as it's used in the new createBlob function.
 import { Blob } from '@google/genai';
 
 export const fileToBase64 = (file: File): Promise<{ base64Data: string; mimeType: string }> => {
@@ -14,8 +13,9 @@ export const fileToBase64 = (file: File): Promise<{ base64Data: string; mimeType
   });
 };
 
-// This is a helper function for createBlob, based on Gemini API documentation.
-function encode(bytes: Uint8Array) {
+// NOTE: The following functions are based on the Gemini API documentation for audio processing.
+
+function encode(bytes: Uint8Array): string {
   let binary = '';
   const len = bytes.byteLength;
   for (let i = 0; i < len; i++) {
@@ -24,7 +24,6 @@ function encode(bytes: Uint8Array) {
   return btoa(binary);
 }
 
-// Fix: Add the missing 'createBlob' function. This is required to send audio data to the Live API.
 export function createBlob(data: Float32Array): Blob {
   const l = data.length;
   const int16 = new Int16Array(l);
@@ -37,8 +36,7 @@ export function createBlob(data: Float32Array): Blob {
   };
 }
 
-// Fix: Add the missing 'decode' function. This is required to process audio data from the Live API.
-export function decode(base64: string) {
+export function decode(base64: string): Uint8Array {
   const binaryString = atob(base64);
   const len = binaryString.length;
   const bytes = new Uint8Array(len);
@@ -48,7 +46,6 @@ export function decode(base64: string) {
   return bytes;
 }
 
-// Fix: Add the missing 'decodeAudioData' function. This is required to process audio data from the Live API.
 export async function decodeAudioData(
   data: Uint8Array,
   ctx: AudioContext,

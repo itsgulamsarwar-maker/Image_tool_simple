@@ -16,4 +16,5 @@ export interface Tool {
   description: string;
   icon: React.ReactElement;
   basePrompt: string;
+  requiresMask?: boolean;
 }
