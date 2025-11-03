@@ -87,6 +87,7 @@ export const useLiveConversation = () => {
       // Fix: Cast window to `any` to support `webkitAudioContext` for older browsers without TypeScript errors.
       outputAudioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: 24000 });
       const outputNode = outputAudioContextRef.current.createGain();
+      outputNode.connect(outputAudioContextRef.current.destination);
 
       const ai = new GoogleGenAI({ apiKey: process.env.API_KEY as string });
 

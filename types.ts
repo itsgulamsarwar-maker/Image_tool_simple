@@ -1,6 +1,7 @@
 import type React from 'react';
 
 export enum ToolId {
+  LiveConversation = 'live-conversation',
   BackgroundRemover = 'background-remover',
   ImageEnhancer = 'image-enhancer',
   ImageRestoration = 'image-restoration',
